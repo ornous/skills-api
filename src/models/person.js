@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   })
-  
+
   Person.associate = models => {
     Person.hasMany(models.Skill)
   }

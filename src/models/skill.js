@@ -5,10 +5,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }
   })
-  
+
   Skill.associate = models => {
     Skill.belongsTo(models.Person, {
-      onDelete: "CASCADE",
+      onDelete: 'CASCADE',
       foreignKey: {
         allowNull: false
       }

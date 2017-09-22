@@ -1,14 +1,12 @@
-import {
+const {
   GraphQLObjectType,
-  GraphQLInputObjectType,
   GraphQLInt,
   GraphQLString,
   GraphQLSchema,
-  GraphQLList,
-  GraphQLNonNull
-} from 'graphql'
+  GraphQLList
+} = require('graphql')
 
-import { sequelize as db } from './models'
+const db = require('../models').sequelize
 
 const Person = new GraphQLObjectType({
   name: 'Person',
@@ -16,31 +14,31 @@ const Person = new GraphQLObjectType({
   fields: () => ({
     id: {
       type: GraphQLInt,
-      resolve(person) {
+      resolve (person) {
         return person.id
       }
     },
     firstName: {
       type: GraphQLString,
-      resolve(person) {
+      resolve (person) {
         return person.firstName
       }
     },
     lastName: {
       type: GraphQLString,
-      resolve(person) {
+      resolve (person) {
         return person.lastName
       }
     },
     email: {
       type: GraphQLString,
-      resolve(person) {
+      resolve (person) {
         return person.email
       }
     },
     skills: {
       type: new GraphQLList(Skill),
-      resolve(person) {
+      resolve (person) {
         return person.getSkills()
       }
     }
@@ -53,13 +51,13 @@ const Skill = new GraphQLObjectType({
   fields: () => ({
     id: {
       type: GraphQLInt,
-      resolve(skill) {
+      resolve (skill) {
         return skill.id
       }
     },
     name: {
       type: GraphQLString,
-      resolve(skill) {
+      resolve (skill) {
         return skill.name
       }
     }
@@ -76,7 +74,7 @@ const Query = new GraphQLObjectType({
         id: { type: GraphQLInt },
         email: { type: GraphQLString }
       },
-      resolve(root, args) {
+      resolve (root, args) {
         return db.models.Person.findAll({ where: args })
       }
     },
@@ -86,7 +84,7 @@ const Query = new GraphQLObjectType({
         id: { type: GraphQLInt },
         name: { type: GraphQLString }
       },
-      resolve(root, args) {
+      resolve (root, args) {
         return db.models.skill.findAll({ where: args })
       }
     }
@@ -97,4 +95,4 @@ const Schema = new GraphQLSchema({
   query: Query
 })
 
-export default Schema
+module.exports = Schema

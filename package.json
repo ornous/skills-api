@@ -30,9 +30,16 @@
     },
     "scripts": {
         "test": "echo \"Error: no tests specified\" && exit 1",
-        "standard": "standard .",
-        "start": "NODE_PATH=./src node .",
-        "start:dev": "nodemon src --exec babel-node | bunyan"
+        "lint": "standard",
+        "start": "NODE_PATH=./src node src",
+        "start:dev": "NODE_PATH=./src nodemon --exec \"yarn lint && node\" src | bunyan"
+    },
+    "nodemonConfig": {
+        "ignore": [
+            "test/*",
+            "docs/*"
+        ],
+        "delay": "2500"
     },
     "keywords": [],
     "author": "Ornous",
