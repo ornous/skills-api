@@ -1,2 +1,11 @@
 .env
 node_modules
+npm-debug.log*
+
+*.seed
+*.log
+.DS_Store
+.node_repl_history
+
+coverage
+lib-cov

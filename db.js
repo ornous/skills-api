@@ -1,13 +1,8 @@
 import Sequelize from 'sequelize'
 import { times } from 'lodash'
 import Faker from 'faker'
-
-const Conn = new Sequelize('relay', 'postgres', 'postgres', {
-    dialect: 'postgres',
-    host: 'localhost'
-})
-
-const Person = Conn.define('person', {
+/*
+const Person = sequelize.define('person', {
     firstName: {
         type: Sequelize.STRING, allowNull: false
     },
@@ -21,23 +16,25 @@ const Person = Conn.define('person', {
     }
 })
 
-const Skill = Conn.define('skill', {
+Person.associate = models => {
+  Person.hasMany(models.Skill)
+}
+
+const Skill = sequelize.define('skill', {
     name: {
         type: Sequelize.STRING, allowNull: false
     }
 })
 
-Person.hasMany(Skill)
-Skill.belongsTo(Person)
+Skill.associate = models => {
+  Skill.belongsTo(models.Person, {
+    onDelete: "CASCADE",
+    foreignKey: {
+      allowNull: false
+    }
+  })
+}
 
-Conn.sync({ force: true }).then(() => {
-    times(10, () => {
-        return Person.create({
-            firstName: Faker.name.firstName(),
-            lastName: Faker.name.lastName(),
-            email: Faker.internet.email()
-        }).then(person => person.createSkill({ name: 'Learning' }))
-    })
-})
 
-export default Conn
+export default sequelize
+*/
