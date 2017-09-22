@@ -4,6 +4,7 @@ const Sequelize = require('sequelize')
 const basename = path.basename(module.filename)
 const config = require('../../config/config.js')
 const db = {}
+console.log(config.database, config.username, config.password, config)
 
 let sequelize = new Sequelize(
   config.database, config.username, config.password, config

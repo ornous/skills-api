@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - DEBUG=false
+      - POSTGRES_USER=definitelynotroot
+      - POSTGRES_DB=skills
+      - POSTGRES_PASS=Sm@11ButMyTea
+  web:
+    build: .
+    restart: always
+    command: yarn start
+    environment:
+      - DB_USER=definitelynotroot
+      - DB_PASS=Sm@11ButMyTea
+      - DB_NAME=skills
+      - DB_HOST=db
+      - DB_PORT=5432
+      - APP_HOST=0.0.0.0
+    volumes:
+      - ".:/usr/src/app/"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db

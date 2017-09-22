@@ -31,7 +31,7 @@
     "scripts": {
         "test": "echo \"Error: no tests specified\" && exit 1",
         "lint": "standard",
-        "start": "NODE_PATH=./src node src",
+        "start": "DEBUG=1 NODE_PATH=./src node src",
         "start:dev": "NODE_PATH=./src nodemon --exec \"yarn lint && node\" src | bunyan"
     },
     "nodemonConfig": {
