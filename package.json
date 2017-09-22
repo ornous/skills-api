@@ -1,0 +1,36 @@
+{
+    "name": "graphql-postgres-mysql-assess",
+    "version": "1.0.0",
+    "main": "index.js",
+    "dependencies": {
+        "apollo-server-express": "^1.1.2",
+        "apollo-tracing": "^0.0.7",
+        "babel-preset-env": "^1.6.0",
+        "body-parser": "^1.18.1",
+        "dotenv": "^4.0.0",
+        "express": "^4.15.4",
+        "faker": "^4.1.0",
+        "graphql": "^0.10.1",
+        "lodash": "^4.17.4",
+        "pg": "^7.3.0",
+        "pg-hstore": "^2.3.2",
+        "prop-types": "^15.5.10",
+        "react": "^15.6.1",
+        "react-dom": "^15.6.1",
+        "sequelize": "^4.10.0"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.26.0",
+        "nodemon": "^1.12.1",
+        "standard": "^10.0.3"
+    },
+    "scripts": {
+        "test": "echo \"Error: no tests specified\" && exit 1",
+        "standard": "standard .",
+        "start": "nodemon index.js --exec babel-node"
+    },
+    "keywords": [],
+    "author": "Ornous",
+    "license": "ISC",
+    "description": "Describe it"
+}
