@@ -23,6 +23,11 @@ app.set('host', APP_HOST)
 app.set('port', APP_PORT)
 
 app.use(expressBunyan())
+app.use('/graphql', require('cors')({
+  origin: '*',
+  methods: ['GET', 'POST']
+}))
+
 app.use('/graphql', bodyParser.json(), graphqlExpress({ schema: Schema }))
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
 
