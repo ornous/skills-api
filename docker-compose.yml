@@ -3,7 +3,6 @@ version: '3'
 services:
   db:
     image: postgres
-    restart: always
     environment:
       - DEBUG=false
       - POSTGRES_USER=definitelynotroot
@@ -12,7 +11,7 @@ services:
   web:
     build: .
     restart: always
-    command: yarn start
+    command: yarn start:dev
     environment:
       - DB_USER=definitelynotroot
       - DB_PASS=Sm@11ButMyTea

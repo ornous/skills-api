@@ -21,7 +21,8 @@
         "react": "^15.6.1",
         "react-dom": "^15.6.1",
         "sequelize": "^4.10.0",
-        "sequelize-cli": "^3.0.0-3"
+        "sequelize-cli": "^3.0.0-3",
+        "sequelize-cockroachdb": "^1.0.2"
     },
     "devDependencies": {
         "babel-cli": "^6.26.0",
@@ -30,7 +31,7 @@
     },
     "scripts": {
         "test": "echo \"Error: no tests specified\" && exit 1",
-        "lint": "standard",
+        "lint": "standard --fix",
         "start": "DEBUG=1 NODE_PATH=./src node src",
         "start:dev": "NODE_PATH=./src nodemon --exec \"yarn lint && node\" src | bunyan"
     },

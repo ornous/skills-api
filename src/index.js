@@ -40,7 +40,6 @@ app.get('/healthz', (req, res) => {
     })
     .finally(() => res.status(appStatusCode).json(appStatus))
 })
-console.log("?")
 
 app.on('listening', () => {
   logger.info('Express server started on port %s at %s', APP_PORT, APP_HOST)

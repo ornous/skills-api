@@ -14,4 +14,4 @@ RUN yarn
 ADD . /usr/src/app
 
 EXPOSE 3000
-CMD [ "node", "src"]
+CMD [ "node", "src" ]

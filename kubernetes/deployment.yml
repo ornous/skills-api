@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gateway-api
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: skills
+        tier: backend
+    spec:
+      containers:
+      - name: graphql-api
+        image: localhost:5000/skills/api
+        env:
+        - name: APP_HOST
+          value: localhost
+        - name: DB_HOST
+          value: postgresql.default.svc.cluster.local
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USER
+          value: definitelynotroot
+        - name: DB_PASSWORD
+          value: Sm@11ButMyTea
+        - name: DB_NAME
+          value: skills
+        - name: GET_HOSTS_FROM
+          value: dns
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 3000
