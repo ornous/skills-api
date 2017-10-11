@@ -10,10 +10,12 @@ const Schema = require('./data/schema')
 
 const logger = bunyan.createLogger({
   name: 'Server',
-  streams: [{
-    level: 'info',
-    stream: process.stdout
-  }]
+  streams: [
+    {
+      level: 'info',
+      stream: process.stdout
+    }
+  ]
 })
 
 const { APP_PORT, APP_HOST } = process.env
@@ -23,10 +25,13 @@ app.set('host', APP_HOST)
 app.set('port', APP_PORT)
 
 app.use(expressBunyan())
-app.use('/graphql', require('cors')({
-  origin: '*',
-  methods: ['GET', 'POST']
-}))
+app.use(
+  '/graphql',
+  require('cors')({
+    origin: '*',
+    methods: ['GET', 'POST']
+  })
+)
 
 app.use('/graphql', bodyParser.json(), graphqlExpress({ schema: Schema }))
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
@@ -36,7 +41,8 @@ app.get('/healthz', (req, res) => {
   let appStatus = { api: 'ok', db: 'unkown' }
   let appStatusCode = 200
 
-  sequelize.authenticate()
+  sequelize
+    .authenticate()
     .then(() => {
       appStatus.db = 'ok'
     })
@@ -61,12 +67,17 @@ process.on('SIGTERM', function () {
   process.exit(0)
 })
 
-sequelize.authenticate().then(() => {
-  logger.info('Attempting to connect to the database')
-  sequelize.sync()
+sequelize
+  .authenticate()
+  .then(() => {
+    logger.info('Attempting to connect to the database')
+    sequelize.sync()
 
-  app.listen(APP_PORT, APP_HOST, () => app.emit('listening'))
-})
-.catch(err => {
-  logger.error(`Got ${err.name}:\nUnable to connect to the database:`, err.original)
-})
+    app.listen(APP_PORT, APP_HOST, () => app.emit('listening'))
+  })
+  .catch(err => {
+    logger.error(
+      `Got ${err.name}:\nUnable to connect to the database:`,
+      err.original
+    )
+  })

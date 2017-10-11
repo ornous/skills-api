@@ -3,3 +3,4 @@ secrets
 .git
 .gitignore
 node_modules
+samples

@@ -1,17 +1,23 @@
-version: '3'
+version: '3.2'
 
 services:
   db:
     image: postgres
     environment:
       - DEBUG=false
-      - POSTGRES_USER=definitelynotroot
-      - POSTGRES_DB=skills
-      - POSTGRES_PASS=Sm@11ButMyTea
+
   web:
+    image: skills/web:latest
+    build: ../api
+    environment:
+      - API_HOST=api
+    depends_on:
+      - api
+
+  api:
     build: .
     restart: always
-    command: yarn start:dev
+    command: yarn test --watch
     environment:
       - DB_USER=definitelynotroot
       - DB_PASS=Sm@11ButMyTea
@@ -25,3 +31,4 @@ services:
       - "3000:3000"
     depends_on:
       - db
+

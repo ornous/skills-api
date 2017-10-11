@@ -12,7 +12,8 @@ spec:
     spec:
       containers:
       - name: graphql-api
-        image: localhost:5000/skills/api
+        image: localhost:5000/skills/api:aa951d5
+        imagePullPolicy: Always
         env:
         - name: APP_HOST
           value: localhost
