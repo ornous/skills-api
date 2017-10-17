@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: gateway-api
 spec:
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
@@ -12,8 +12,7 @@ spec:
     spec:
       containers:
       - name: graphql-api
-        image: localhost:5000/skills/api:aa951d5
-        imagePullPolicy: Always
+        image: registry.hub.docker.com/senforsce/skills-api:latest
         env:
         - name: APP_HOST
           value: localhost

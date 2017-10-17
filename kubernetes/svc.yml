@@ -1,13 +1,13 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: gateway-api
+  name: skills-api
 spec:
   type: NodePort
   ports:
     - port: 3000
       targetPort: 3000
-      name: express-node
+      name: expressjs
   selector:
     app: skills
     tier: backend
