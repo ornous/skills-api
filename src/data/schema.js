@@ -107,6 +107,17 @@ const Mutation = new GraphQLObjectType({
         console.log(value)
         return db.models.Person.create({ firstName, lastName, email })
       }
+    },
+    addSkillToUser: {
+      type: Skill,
+      args: {
+        userId: { type: new GraphQLNonNull(GraphQLInt) },
+        name: { type: new GraphQLNonNull(GraphQLString) }
+      },
+      resolve: (value, { userId, name }) =>
+        db.models.Person
+          .findById(userId)
+          .then(user => user.createSkill({ name }))
     }
   })
 })
