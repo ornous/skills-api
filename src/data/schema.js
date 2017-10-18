@@ -103,10 +103,17 @@ const Mutation = new GraphQLObjectType({
         lastName: { type: new GraphQLNonNull(GraphQLString) },
         email: { type: new GraphQLNonNull(GraphQLString) }
       },
-      resolve: (value, { firstName, lastName, email }) => {
-        console.log(value)
-        return db.models.Person.create({ firstName, lastName, email })
-      }
+      resolve: (value, { firstName, lastName, email }) =>
+        db.models.Person.create({ firstName, lastName, email })
+    },
+    removeSkillFromUser: {
+      type: Skill,
+      args: {
+        id: { type: new GraphQLNonNull(GraphQLInt) },
+        userId: { type: new GraphQLNonNull(GraphQLInt) }
+      },
+      resolve: (value, { userId, id }) =>
+        db.models.Person.findById(userId).then(user => user.removeSkill(id))
     },
     addSkillToUser: {
       type: Skill,
