@@ -10,6 +10,7 @@ jobs:
     params:
       build: repo
       tag: version/number
+      tag_as_latest: true
       cache_tag: latest
       cache: true
   - put: version
