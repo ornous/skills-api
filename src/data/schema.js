@@ -1,9 +1,10 @@
 const {
-  GraphQLObjectType,
   GraphQLInt,
-  GraphQLString,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
   GraphQLSchema,
-  GraphQLList
+  GraphQLString
 } = require('graphql')
 
 const db = require('../models').sequelize
@@ -91,8 +92,28 @@ const Query = new GraphQLObjectType({
   })
 })
 
+const Mutation = new GraphQLObjectType({
+  name: 'Skills_Mutations',
+  description: 'You can mutate your skills however you want..',
+  fields: () => ({
+    createUser: {
+      type: Person,
+      args: {
+        firstName: { type: new GraphQLNonNull(GraphQLString) },
+        lastName: { type: new GraphQLNonNull(GraphQLString) },
+        email: { type: new GraphQLNonNull(GraphQLString) }
+      },
+      resolve: (value, { firstName, lastName, email }) => {
+        console.log(value)
+        return db.models.Person.create({ firstName, lastName, email })
+      }
+    }
+  })
+})
+
 const Schema = new GraphQLSchema({
-  query: Query
+  query: Query,
+  mutation: Mutation
 })
 
 module.exports = Schema
