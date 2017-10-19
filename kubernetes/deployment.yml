@@ -13,6 +13,7 @@ spec:
       containers:
       - name: graphql-api
         image: registry.hub.docker.com/senforsce/skills-api:latest
+        imagePullPolicy: Always
         env:
         - name: APP_HOST
           value: localhost

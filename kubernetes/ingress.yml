@@ -8,10 +8,6 @@ spec:
   rules:
   - http:
       paths:
-      - path: /.*
-        backend:
-          serviceName: skills-web
-          servicePort: http
       - path: /graphiql
         backend:
           serviceName: skills-api
@@ -19,4 +15,12 @@ spec:
       - path: /graphql
         backend:
           serviceName: skills-api
+          servicePort: http
+      - path: /ci
+        backend:
+          serviceName: concourse-web
+          servicePort: 8080
+      - path: /
+        backend:
+          serviceName: skills-web
           servicePort: http
