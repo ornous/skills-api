@@ -35,3 +35,23 @@ spec:
             memory: 100Mi
         ports:
         - containerPort: 3000
+
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+            httpHeaders:
+            - name: X-Custom-Header
+              value: Ready
+          initialDelaySeconds: 15
+          periodSeconds: 3
+
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+            httpHeaders:
+            - name: X-Custom-Header
+              value: Healthy
+          initialDelaySeconds: 3
+          periodSeconds: 3
