@@ -51,6 +51,7 @@ jobs:
     params:
       image_name: repo/ci/DOCKER_IMAGE_NAME
       image_tag: version/number
+
 - name: ship
   public: true
   serial: true
@@ -72,7 +73,7 @@ resources:
   source:
     driver: git
     initial_version: 0.0.1
-    uri: git@gitlab.com:ornous/skills/api.git
+    uri: {{gitlab-repo}}
     branch: version
     file: version
     private_key: {{gitlab-private-key}}
@@ -80,7 +81,7 @@ resources:
 - name: repo
   type: git
   source:
-    uri: git@gitlab.com:ornous/skills/api.git
+    uri: {{gitlab-repo}}
     branch: master
     private_key: {{gitlab-private-key}}
 
