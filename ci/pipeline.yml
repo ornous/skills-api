@@ -16,57 +16,6 @@ jobs:
   - put: version
     params: {bump: minor}
 
-- name: uat
-  public: true
-  serial: true
-  plan:
-  - aggregate:
-    - get: repo
-      passed: [build]
-    - get: version
-      passed: [build]
-      trigger: true
-    - get: skills-api-image
-      passed: [build]
-      trigger: true
-  - put: staging
-    params:
-      image_name: repo/ci/DOCKER_IMAGE_NAME
-      image_tag: version/number
-
-- name: stage
-  public: true
-  serial: true
-  plan:
-  - aggregate:
-    - get: repo
-      passed: [build]
-    - get: version
-      passed: [build]
-      trigger: true
-    - get: skills-api-image
-      passed: [build]
-      trigger: true
-  - put: staging
-    params:
-      image_name: repo/ci/DOCKER_IMAGE_NAME
-      image_tag: version/number
-
-- name: ship
-  public: true
-  serial: true
-  plan:
-  - get: repo
-    passed: [stage]
-  - get: version
-    passed: [stage]
-  - get: staging
-    passed: [stage]
-  - put: prod
-    params:
-      image_name: repo/ci/DOCKER_IMAGE_NAME
-      image_tag: version/number
-
 resources:
 - name: version
   type: semver
@@ -91,30 +40,6 @@ resources:
     repository: senforsce/skills-api
     username: {{docker-hub-username}}
     password: {{docker-hub-password}}
-
-- name: staging
-  type: kubernetes
-  source:
-    namespace: staging
-    resource_type: deployment
-    resource_name: skills-api
-    container_name: skills-api
-    cluster_url: {{kubernetes-cluster-url}}
-    cluster_ca: {{kubernetes-cluster-ca}}
-    admin_key: {{kubernetes-admin-key}}
-    admin_cert: {{kubernetes-admin-cert}}
-
-- name: prod
-  type: kubernetes
-  source:
-    namespace: production
-    resource_type: deployment
-    resource_name: skills-api
-    container_name: skills-api
-    cluster_url: {{kubernetes-cluster-url}}
-    cluster_ca: {{kubernetes-cluster-ca}}
-    admin_key: {{kubernetes-cluster-ca}}
-    admin_cert: {{kubernetes-cluster-ca}}
 
 resource_types:
 - name: kubernetes
