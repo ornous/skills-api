@@ -15,6 +15,35 @@ jobs:
       cache: true
   - put: version
     params: {bump: minor}
+- name: deploy
+  public: true
+  serial: true
+  plan:
+  - aggregate:
+    - get: version
+      passed: [build]
+      trigger: true
+    - get: repo
+      passed: [build]
+      trigger: true
+    - get: skills-api-image
+      passed: [build]
+      trigger: true
+    - put: test-env
+    params:
+      chart: repo/deploy/helm/web-((version/number)).tgz
+      values: repo/deploy/helm/values.yaml
+      wait_until_ready: true
+      release: repo/deploy/helm/release_name
+      override_values:
+      - key: replicas
+        value: 1
+      - key: version
+        path: version/number
+      - key: ImageTag
+        path: version/number
+      - key: IngressDomain
+        value: test.((version/number))
 
 resources:
 - name: version
@@ -41,8 +70,23 @@ resources:
     username: {{docker-hub-username}}
     password: {{docker-hub-password}}
 
+- name: test-env
+  type: helm
+  source:
+    cluster_url: https://kube-master.domain.example
+    cluster_ca: _base64 encoded CA pem_
+    admin_key: _base64 encoded key pem_
+    admin_cert: _base64 encoded certificate pem_
+    namespace: test
+
 resource_types:
+
 - name: kubernetes
   type: docker-image
   source:
     repository: jcderr/concourse-kubernetes-resource
+
+- name: helm
+  type: docker-image
+  source:
+    repository: linkyard/concourse-helm-resource
