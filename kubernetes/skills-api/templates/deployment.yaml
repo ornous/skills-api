@@ -1,0 +1,70 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "name" . }}
+  labels:
+    app: {{ template "name" . }}
+    version: {{ .Chart.Version }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 5
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "name" . }}
+        version: {{ .Chart.Version }}
+        tier: backend
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: APP_HOST
+            value: localhost
+          - name: DB_HOST
+            value: postgresql
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_USER
+            value: definitelynotroot
+          - name: DB_PASSWORD
+            value: Sm@11ButMyTea
+          - name: DB_NAME
+            value: skills
+          - name: GET_HOSTS_FROM
+            value: dns
+          ports:
+          - containerPort: {{ .Values.service.internalPort }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.service.internalPort }}
+              httpHeaders:
+              - name: X-Kubernetes-Probe-Kind
+                value: liveness
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: {{ .Values.service.internalPort }}
+              httpHeaders:
+              - name: X-Kubernetes-Probe-Kind
+                value: readiness
+            initialDelaySeconds: 15
+            periodSeconds: 3
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}
