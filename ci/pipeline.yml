@@ -31,10 +31,10 @@ jobs:
       trigger: true
     - put: test-env
     params:
-      chart: repo/kubernetes/skills-api
+      chart: repo/kubernetes/skills-api/skills-api-((version/number)).tgz
       values: repo/kubernetes/skills-api/values.yaml
       wait_until_ready: true
-      release: repo/kubernetes/skills-api/release_name
+      release: skills-api
       override_values:
       - key: replicaCount
         value: 1
@@ -75,10 +75,11 @@ resources:
 - name: test-env
   type: helm
   source:
-    cluster_url: https://kube-master.domain.example
-    cluster_ca: _base64 encoded CA pem_
-    admin_key: _base64 encoded key pem_
-    admin_cert: _base64 encoded certificate pem_
+    cluster_url: {{kubernetes-url}}
+    cluster_ca: {{kubernetes-ca}}
+    token: {{kubernetes-ca}}
+    admin_key: {{kubernetes-admin-key}}
+    admin_cert: {{kubernetes-admin-cert}}
     namespace: test
 
 resource_types:
