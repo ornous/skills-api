@@ -31,19 +31,21 @@ jobs:
       trigger: true
     - put: test-env
     params:
-      chart: repo/deploy/helm/web-((version/number)).tgz
-      values: repo/deploy/helm/values.yaml
+      chart: repo/kubernetes/skills-api
+      values: repo/kubernetes/skills-api/values.yaml
       wait_until_ready: true
-      release: repo/deploy/helm/release_name
+      release: repo/kubernetes/skills-api/release_name
       override_values:
-      - key: replicas
+      - key: replicaCount
         value: 1
       - key: version
         path: version/number
-      - key: ImageTag
+      - key: image.tag
         path: version/number
-      - key: IngressDomain
+      - key: ingress.hosts[0]
         value: test.((version/number))
+      - key: ingress.enabled
+        value: false
 
 resources:
 - name: version
