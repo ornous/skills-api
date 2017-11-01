@@ -68,7 +68,7 @@ jobs:
     trigger: true
   - put: testing
     params:
-      chart: repo/kubernetes/skills-api
+      chart: repo/kubernetes/skills-api-0.14.0.tgz
       wait_until_ready: true
       debug: true
       override_values:
