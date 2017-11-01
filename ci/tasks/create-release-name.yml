@@ -1,3 +1,5 @@
+---
+platform: linux
 
 image_resource:
   type: docker-image
@@ -7,10 +9,9 @@ inputs:
 - name: repo
 
 outputs:
-- name: release_name
-  path: release_name
+- name: release-name
 
 run:
   dir: repo
   path: sh
-  args: [ci/tasks/create-release-name]
+  args: [ci/script/create-release-name]

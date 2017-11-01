@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e -u
+
+mkdir release-name
+echo "skills-api" > release-name/release-name
+ls -alh release-name

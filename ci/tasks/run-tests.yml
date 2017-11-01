@@ -11,4 +11,4 @@ inputs:
 run:
   dir: repo
   path: sh
-  args: [ci/tasks/run-tests]
+  args: [ci/scripts/run-tests]

@@ -78,13 +78,13 @@ jobs:
           repository: busybox
       run:
         path: ls
-        args: ["-alh", "release_name"]
+        args: ["-alh", "release-name"]
       inputs:
-      - name: release_name
+      - name: release-name
   - put: testing
     params:
       chart: repo/kubernetes/skills-api-0.14.0.tgz
-      release: release_name
+      release: release-name/release-name
       wait_until_ready: true
       debug: false # turn on to add --dry-run --debug to helm run
       override_values:
