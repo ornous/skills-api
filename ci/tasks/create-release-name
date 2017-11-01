@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e -u
+
+echo "skills-api" > release_name
