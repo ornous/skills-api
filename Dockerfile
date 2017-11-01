@@ -7,9 +7,9 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 COPY package.json yarn.lock ./
-RUN yarn config set version-git-tag false && \
-    yarn version --new-version "$APP_VERSION" && \
-    yarn install --no-progress --no-scripts --emoji # (:
+#RUN yarn config set version-git-tag false && \
+#    yarn version --new-version "$APP_VERSION" && \
+RUN yarn install --no-progress --no-scripts --emoji # (:
 
 COPY . .
 
