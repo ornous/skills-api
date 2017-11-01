@@ -52,7 +52,7 @@ jobs:
         cache_tag: latest
         cache: true
         build_args:
-          VERSION: ((version/number))
+          APP_VERSION: ((version/number))
 - name: deploy
   public: true
   serial: false
@@ -69,6 +69,7 @@ jobs:
   - put: testing
     params:
       chart: repo/kubernetes/skills-api-0.14.0.tgz
+      release: repo/kubernetes/skills-api/release_name
       wait_until_ready: true
       debug: true
       override_values:
