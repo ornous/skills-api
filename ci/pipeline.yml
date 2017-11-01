@@ -69,18 +69,6 @@ jobs:
       trigger: true
   - task: create-release-name
     file: repo/ci/tasks/create-release-name.yml
-  - task: show-me-the-stuff
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: busybox
-      run:
-        path: ls
-        args: ["-alh", "release-name"]
-      inputs:
-      - name: release-name
   - put: testing
     params:
       chart: repo/kubernetes/skills-api-0.14.0.tgz
