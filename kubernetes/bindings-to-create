@@ -1,0 +1,2 @@
+kubectl create rolebinding client-admin-binding-system --clusterrole=admin --user=client
+kubectl create rolebinding client-admin-binding-system --clusterrole=admin --user=client --namespace=kube-system
