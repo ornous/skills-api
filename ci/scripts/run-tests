@@ -1,5 +1,5 @@
-#!/bin/bash
+#!/bin/sh
 
-set -e -u -x
+set -e -u
 
 yarn install --emoji --ignore-scripts --no-progress && yarn test
