@@ -14,4 +14,4 @@ outputs:
 run:
   dir: repo
   path: sh
-  args: [ci/script/create-release-name]
+  args: [ci/scripts/create-release-name]
