@@ -35,12 +35,13 @@
   "scripts": {
     "install": "node init.js",
     "commitmsg": "validate-commit-msg",
-    "precommit": "lint-staged",
+    "precommit": "lint-staged && yarn changelog",
     "prepush": "yarn test",
     "test": "yarn lint",
     "lint": "prettier-standard --verbose --fix src/**/*.js | snazzy",
     "start": "DEBUG=1 NODE_PATH=./src node src",
-    "start:dev": "NODE_PATH=./src nodemon --exec \"yarn lint && node\" src | bunyan"
+    "start:dev": "NODE_PATH=./src nodemon --exec \"yarn lint && node\" src | bunyan",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,json,css}": [
@@ -66,9 +67,7 @@
       "scope": {
         "required": false,
         "allowed": [
-          "ci",
-          "autodeploy",
-          "changelog"
+          "*"
         ],
         "validate": true,
         "multiple": true
