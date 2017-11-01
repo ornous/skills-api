@@ -2,6 +2,7 @@
 
 set -e -u
 
+pwd
 mkdir release-name
 echo "skills-api" > release-name/release-name
-ls -alh release-name
+cat release-name/release-name
