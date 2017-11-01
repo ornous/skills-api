@@ -1,11 +1,15 @@
 FROM node:8-alpine as builder
 MAINTAINER Ozzy Ndiaye <snekshaark@gmail.com>
+ARG VERSION
+LABEL version=${VERSION}
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 COPY package.json yarn.lock ./
-RUN yarn
+RUN yarn config set version-git-tag false && \
+    yarn version --new-version "${VERSION}" && \
+    yarn install --no-progress --no-scripts --emoji # (:
 
 COPY . .
 

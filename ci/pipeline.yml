@@ -1,49 +1,83 @@
 jobs:
-- name: build
+- name: test
   public: true
   serial: true
   plan:
-  - get: version
   - get: repo
+    resource: merge-requests
     trigger: true
-  - put: skills-api-image
+  - put: merge-requests
     params:
-      build: repo
-      tag: version/number
-      tag_as_latest: true
-      cache_tag: latest
-      cache: true
+      repository: repo
+      status: running
+  - task: run-tests
+    file: repo/ci/tasks/run-tests.yml
+  on_failure:
+    put: merge-requests
+    params:
+      repository: repo
+      status: failed
+  on_success:
+    put: merge-requests
+    params:
+      repository: repo
+      status: success
+- name: major
+  public: true
+  plan:
+  - get: version
+  - put: version
+    params: {bump: major}
+- name: minor
+  public: true
+  plan:
+  - get: version
   - put: version
     params: {bump: minor}
-- name: deploy
+- name: build
   public: true
   serial: true
   plan:
   - aggregate:
     - get: version
-      passed: [build]
       trigger: true
     - get: repo
-      passed: [build]
       trigger: true
-    - get: skills-api-image
-      passed: [build]
-      trigger: true
-    - put: test-env
+  - aggregate:
+    - put: skills-api-image
+      params:
+        build: repo
+        tag: version/number
+        tag_as_latest: true
+        cache_tag: latest
+        cache: true
+        build_args:
+          VERSION: ((version/number))
+- name: deploy
+  public: true
+  serial: false
+  plan:
+  - get: version
+    passed: [build]
+    trigger: true
+  - get: repo
+    passed: [build]
+    trigger: true
+  - get: skills-api-image
+    passed: [build]
+    trigger: true
+  - put: testing
     params:
-      chart: repo/kubernetes/skills-api/skills-api-((version/number)).tgz
-      values: repo/kubernetes/skills-api/values.yaml
+      chart: repo/kubernetes/skills-api
       wait_until_ready: true
-      release: skills-api
+      debug: true
       override_values:
       - key: replicaCount
-        value: 1
+        value: "1"
       - key: version
         path: version/number
       - key: image.tag
         path: version/number
-      - key: ingress.hosts[0]
-        value: test.((version/number))
       - key: ingress.enabled
         value: false
 
@@ -57,39 +91,38 @@ resources:
     branch: version
     file: version
     private_key: {{gitlab-private-key}}
-
 - name: repo
   type: git
   source:
     uri: {{gitlab-repo}}
     branch: master
     private_key: {{gitlab-private-key}}
-
 - name: skills-api-image
   type: docker-image
   source:
     repository: senforsce/skills-api
     username: {{docker-hub-username}}
     password: {{docker-hub-password}}
-
-- name: test-env
+- name: testing
   type: helm
   source:
     cluster_url: {{kubernetes-url}}
     cluster_ca: {{kubernetes-ca}}
-    token: {{kubernetes-ca}}
     admin_key: {{kubernetes-admin-key}}
     admin_cert: {{kubernetes-admin-cert}}
-    namespace: test
+- name: merge-requests
+  type: merge-request
+  source:
+    uri: {{gitlab-repo}}
+    private_key: {{gitlab-private-key}}
+    private_token: {{gitlab-private-token}}
 
 resource_types:
-
-- name: kubernetes
-  type: docker-image
-  source:
-    repository: jcderr/concourse-kubernetes-resource
-
 - name: helm
   type: docker-image
   source:
     repository: linkyard/concourse-helm-resource
+- name: merge-request
+  type: docker-image
+  source:
+    repository: jakedsouza/gitlab-merge-request-resource
