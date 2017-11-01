@@ -2,6 +2,4 @@
 
 set -e -u
 
-pwd
-mkdir release-name
 echo "skills-api" > release-name/release-name
