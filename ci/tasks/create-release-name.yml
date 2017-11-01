@@ -12,6 +12,4 @@ outputs:
 - name: release-name
 
 run:
-  dir: repo
-  path: sh
-  args: [ci/scripts/create-release-name]
+  path: repo/ci/scripts/create-release-name
