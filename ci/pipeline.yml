@@ -55,23 +55,38 @@ jobs:
           APP_VERSION: ((version/number))
 - name: deploy
   public: true
-  serial: false
+  serial: true
   plan:
-  - get: version
-    passed: [build]
-    trigger: true
-  - get: repo
-    passed: [build]
-    trigger: true
-  - get: skills-api-image
-    passed: [build]
-    trigger: true
+  - aggregate:
+    - get: version
+      passed: [build]
+      trigger: true
+    - get: repo
+      passed: [build]
+      trigger: true
+    - get: skills-api-image
+      passed: [build]
+      trigger: true
+  - task: create-release-name
+    file: repo/ci/tasks/create-release-name.yml
+  - task: show-me-the-stuff
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: busybox
+      run:
+        path: ls
+        args: ["release_name"]
+      inputs:
+      - name: release-name
   - put: testing
     params:
       chart: repo/kubernetes/skills-api-0.14.0.tgz
-      release: repo/kubernetes/skills-api/release_name
+      release: release-name/release-name
       wait_until_ready: true
-      debug: true
+      debug: false # turn on to add --dry-run --debug to helm run
       override_values:
       - key: replicaCount
         value: "1"
