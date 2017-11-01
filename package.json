@@ -66,10 +66,12 @@
       "scope": {
         "required": false,
         "allowed": [
-          "*"
+          "ci",
+          "autodeploy",
+          "changelog"
         ],
-        "validate": false,
-        "multiple": false
+        "validate": true,
+        "multiple": true
       },
       "warnOnFail": false,
       "maxSubjectLength": 100,
