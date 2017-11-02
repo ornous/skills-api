@@ -1,16 +1,21 @@
 groups:
-- name: ci-images
-  jobs:
-  - build-images
-- name: dev
-  jobs:
-  - test
-- name: staging
+- name: master
   jobs:
   - minor
   - major
   - build
   - deploy
+  - security
+  - performance
+  - uat
+  - stage
+  - promote
+- name: merge-requests
+  jobs:
+  - test
+- name: ci-images
+  jobs:
+  - build-images
 
 jobs:
 - name: test
@@ -72,18 +77,57 @@ jobs:
   serial: true
   plan:
   - aggregate:
-    - get: version
-      passed: [build]
-      trigger: true
-    - get: repo
-      passed: [build]
-      trigger: true
-    - get: skills-api-image
-      passed: [build]
-      trigger: true
+    - { get: version, passed: [build], trigger: true }
+    - { get: repo, passed: [build], trigger: true }
   - task: create-release-name
     file: repo/ci/tasks/create-release-name.yml
-  - put: testing
+    params:
+      env: testing
+  - put: test-env
+    params:
+      chart: repo/kubernetes/skills-api-0.14.0.tgz
+      release: release-name/release-name
+      wait_until_ready: true
+      debug: true # turn on to add --dry-run --debug to helm run
+      replace: false
+      override_values:
+      - key: replicaCount
+        value: "1"
+      - key: image.tag
+        path: version/number
+      - key: ingress.enabled
+        value: false
+- name: uat
+  public: true
+  serial: true
+  plan:
+  - aggregate:
+    - { get: version, passed: [deploy], trigger: true }
+    - { get: test-env, passed: [deploy], trigger: true }
+- name: performance
+  public: true
+  serial: true
+  plan:
+  - aggregate:
+    - { get: test-env, passed: [deploy], trigger: true }
+- name: security
+  public: true
+  serial: true
+  plan:
+  - aggregate:
+    - { get: test-env, passed: [deploy], trigger: true }
+- name: stage
+  public: true
+  serial: true
+  plan:
+  - aggregate:
+    - { get: version, passed: [uat], trigger: false }
+    - { get: repo, passed: [deploy], trigger: false }
+  - task: create-release-name
+    file: repo/ci/tasks/create-release-name.yml
+    params:
+      env: staging
+  - put: staging
     params:
       chart: repo/kubernetes/skills-api-0.14.0.tgz
       release: release-name/release-name
@@ -91,14 +135,30 @@ jobs:
       debug: false # turn on to add --dry-run --debug to helm run
       replace: true
       override_values:
-      - key: replicaCount
-        value: "1"
-      - key: version
-        path: version/number
       - key: image.tag
         path: version/number
-      - key: ingress.enabled
-        value: false
+- name: promote
+  public: true
+  serial: true
+  plan:
+  - aggregate:
+    - { get: version, passed: [stage], trigger: false }
+    - { get: repo, passed: [stage], trigger: false }
+    - { get: staging, passed: [stage], trigger: false }
+  - task: create-release-name
+    file: repo/ci/tasks/create-release-name.yml
+    params:
+      env: production
+  - put: production
+    params:
+      chart: repo/kubernetes/skills-api-0.14.0.tgz
+      release: release-name/release-name
+      wait_until_ready: true
+      debug: false # turn on to add --dry-run --debug to helm run
+      replace: true
+      override_values:
+      - key: image.tag
+        path: version/number
 - name: build-images
   public: true
   serial: true
@@ -140,13 +200,30 @@ resources:
     repository: senforsce/skills-api
     username: {{docker-hub-username}}
     password: {{docker-hub-password}}
-- name: testing
+- name: test-env
   type: helm
   source:
     cluster_url: {{kubernetes-url}}
     cluster_ca: {{kubernetes-ca}}
     admin_key: {{kubernetes-admin-key}}
     admin_cert: {{kubernetes-admin-cert}}
+    namespace: test-env
+- name: staging
+  type: helm
+  source:
+    cluster_url: {{kubernetes-url}}
+    cluster_ca: {{kubernetes-ca}}
+    admin_key: {{kubernetes-admin-key}}
+    admin_cert: {{kubernetes-admin-cert}}
+    namespace: staging
+- name: production
+  type: helm
+  source:
+    cluster_url: {{kubernetes-url}}
+    cluster_ca: {{kubernetes-ca}}
+    admin_key: {{kubernetes-admin-key}}
+    admin_cert: {{kubernetes-admin-cert}}
+    namespace: production
 - name: merge-requests
   type: merge-request
   source:
