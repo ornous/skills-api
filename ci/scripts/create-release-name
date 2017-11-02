@@ -1,6 +1,11 @@
 #!/bin/sh
 
 set -e -u
-
-echo ${env}
-echo "skills-api" > release-name/release-name
+echo "Creating release name for ${app} in ${env}"
+release_name="${app}-${env}"
+if [ "${env}" = "test" ]; then
+  # Good enough until we actually get a clashing issue...
+  hash=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
+  release_name="${release_name}${hash}"
+fi
+echo "${release_name}" > release-name/release-name

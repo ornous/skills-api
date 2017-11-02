@@ -82,6 +82,7 @@ jobs:
   - task: create-release-name
     file: repo/ci/tasks/create-release-name.yml
     params:
+      app: skills-api
       env: testing
   - put: test-env
     params:
@@ -126,6 +127,7 @@ jobs:
   - task: create-release-name
     file: repo/ci/tasks/create-release-name.yml
     params:
+      app: skills-api
       env: staging
   - put: staging
     params:
@@ -148,6 +150,7 @@ jobs:
   - task: create-release-name
     file: repo/ci/tasks/create-release-name.yml
     params:
+      app: skills-api
       env: production
   - put: production
     params:
