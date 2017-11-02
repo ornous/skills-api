@@ -3,17 +3,6 @@
 The Skills Api project welcomes contributions via GitLab merge requests.<br>
 This document outlines the process to help get your contribution accepted.
 
-### How to Contribute
-
-1. If you haven't already done so, sign a Contributor License Agreement (see details above).
-1. Fork this repository, develop and test your Chart.
-1. Choose the correct folder for your chart based on the information in the [Repository Structure](README.md#repository-structure) section
-1. Ensure your Chart follows the [technical](#technical-requirements) and [documentation](#documentation-requirements) guidelines, described below.
-1. Submit a pull request.
-
-***NOTE***: In order to make testing and merging of PRs easier, please submit changes to multiple charts in separate PRs.
-
-#### Documentation requirements
 
 #### Merge approval and release process
 
