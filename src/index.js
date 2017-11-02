@@ -1,6 +1,8 @@
 require('dotenv').config()
 const bunyan = require('bunyan')
 const bodyParser = require('body-parser')
+const compression = require('compression')
+const Engine = require('apollo-engine').Engine
 const expressBunyan = require('express-bunyan-logger')
 const express = require('express')
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
@@ -24,7 +26,20 @@ const app = express()
 app.set('host', APP_HOST)
 app.set('port', APP_PORT)
 
+const engine = new Engine({
+  engineConfig: {
+    apiKey: 'service:ornous-skills-staging:rik0Q78HrR8foBYYjpr46g',
+    logging: {
+      level: 'INFO' // Proxy logging. DEBUG, INFO, WARN or ERROR
+    }
+  },
+  graphqlPort: APP_PORT || 3000, // GraphQL port
+  dumpTraffic: true // Debug configuration that logs traffic between Proxy and GraphQL server
+})
+
+app.use(engine.expressMiddleware())
 app.use(expressBunyan())
+app.use(compression())
 app.use(
   '/graphql',
   require('cors')({
@@ -33,7 +48,16 @@ app.use(
   })
 )
 
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema: Schema }))
+app.use(
+  '/graphql',
+  bodyParser.json(),
+  graphqlExpress({
+    schema: Schema,
+    context: {},
+    tracing: true,
+    cacheControl: true
+  })
+)
 app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
 
 // Graceful startup/shutdown
@@ -73,6 +97,7 @@ sequelize
     logger.info('Attempting to connect to the database')
     sequelize.sync()
 
+    engine.start()
     app.listen(APP_PORT, APP_HOST, () => app.emit('listening'))
   })
   .catch(err => {
