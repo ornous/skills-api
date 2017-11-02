@@ -8,4 +8,5 @@ if [ "${env}" = "test" ]; then
   hash=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1)
   release_name="${release_name}${hash}"
 fi
+echo "Picked ${release_name}"
 echo "${release_name}" > release-name/release-name
