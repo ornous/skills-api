@@ -1,4 +1,4 @@
-FROM node:8-alpine as builder
+FROM node:8.8.1-alpine as builder
 MAINTAINER Ozzy Ndiaye <snekshaark@gmail.com>
 ARG APP_VERSION
 LABEL version=${VERSION}
@@ -13,7 +13,7 @@ RUN yarn install --no-progress --ignore-scripts --emoji # (:
 
 COPY . .
 
-FROM node:8-alpine
+FROM node:8.8.1-alpine
 ENV NODE_ENV "production"
 ENV APP_PORT 3000
 EXPOSE 3000
