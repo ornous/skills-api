@@ -35,7 +35,7 @@
   "scripts": {
     "install": "node init.js",
     "commitmsg": "validate-commit-msg",
-    "precommit": "lint-staged && yarn changelog",
+    "precommit": "lint-staged && yarn changelog && git add CHANGELOG.md",
     "prepush": "yarn test",
     "test": "yarn lint",
     "lint": "prettier-standard --verbose --fix src/**/*.js | snazzy",
