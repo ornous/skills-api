@@ -1,0 +1,35 @@
+config:
+  target: 'http://localhost:3001'
+  phases:
+      - duration: 10
+        arrivalRate: 5
+        name: "Is that even load? Do u even lyft?"
+  defaults:
+    headers:
+      Accept-Encoding: 'gzip, deflate, br'
+      Content-Type: 'application/json'
+      Accept: 'application/json'
+  environments:
+    production:
+      target: "http://skills.ozzy.systems"
+      phases:
+        - duration: 120
+          arrivalRate: 10
+    staging:
+      target: "http://localhost:3001"
+      phases:
+        - duration: 120
+          arrivalRate: 10
+          rampTo: 50
+          name: "Warm up the application"
+        - duration: 600
+          arrivalRate: 50
+          name: "Sustained max load"
+scenarios:
+  - name: "Basic Smoke-Perf-Test"
+    flow:
+    - post:
+        url: "/graphql"
+        json:
+          query: "query { people { id skills { id name } }}"
+          variables: null
