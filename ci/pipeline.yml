@@ -1,3 +1,17 @@
+groups:
+- name: ci-images
+  jobs:
+  - build-images
+- name: dev
+  jobs:
+  - test
+- name: staging
+  jobs:
+  - minor
+  - major
+  - build
+  - deploy
+
 jobs:
 - name: test
   public: true
@@ -85,6 +99,24 @@ jobs:
         path: version/number
       - key: ingress.enabled
         value: false
+- name: build-images
+  public: true
+  serial: true
+  plan:
+  - get: repo
+    trigger: true
+  - aggregate:
+    - put: artillery
+      params:
+        build: repo/ci/images/cucumber
+        cache_tag: latest
+        cache: true
+    - put: cucumber
+      params:
+        build: repo/ci/images/cucumber
+        tag_as_latest: true
+        cache_tag: latest
+        cache: true
 
 resources:
 - name: version
@@ -121,6 +153,19 @@ resources:
     uri: {{gitlab-repo}}
     private_key: {{gitlab-private-key}}
     private_token: {{gitlab-private-token}}
+- name: artillery
+  type: docker-image
+  source:
+    repository: senforsce/artillery
+    username: {{docker-hub-username}}
+    password: {{docker-hub-password}}
+
+- name: cucumber
+  type: docker-image
+  source:
+    repository: senforsce/cucumber
+    username: {{docker-hub-username}}
+    password: {{docker-hub-password}}
 
 resource_types:
 - name: helm
