@@ -31,4 +31,9 @@
 * validate and limit commit scopes ([61a0ffc](https://gitlab.com/ornous/skills/api/commit/61a0ffc))
 
 
+### Performance Improvements
+
+* **graphql:** Add basic artillery performance test ([167349c](https://gitlab.com/ornous/skills/api/commit/167349c))
+
+
 
