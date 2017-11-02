@@ -1,5 +1,5 @@
 <a name="0.15.0"></a>
-# 0.15.0 (2017-11-01)
+# 0.15.0 (2017-11-02)
 
 
 ### Bug Fixes
@@ -9,6 +9,7 @@
 * Create Release Name task ([351574c](https://gitlab.com/ornous/skills/api/commit/351574c))
 * Ensure yarn install ignores lifecycle hooks on build ([ba478f7](https://gitlab.com/ornous/skills/api/commit/ba478f7))
 * Typo for release name script invocation ([d061099](https://gitlab.com/ornous/skills/api/commit/d061099))
+* **changelog:** My commit messages are dumb ([c6d14ca](https://gitlab.com/ornous/skills/api/commit/c6d14ca))
 * **ci:** Remove debug tasks ([6b4a9ac](https://gitlab.com/ornous/skills/api/commit/6b4a9ac))
 * **ci:** scripts should refer to sh instead of bash ([0ee2f64](https://gitlab.com/ornous/skills/api/commit/0ee2f64))
 * **ci:** scripts should refer to sh instead of bash ([34a8ffe](https://gitlab.com/ornous/skills/api/commit/34a8ffe))

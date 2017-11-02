@@ -75,6 +75,7 @@ jobs:
       release: release-name/release-name
       wait_until_ready: true
       debug: false # turn on to add --dry-run --debug to helm run
+      replace: true
       override_values:
       - key: replicaCount
         value: "1"
