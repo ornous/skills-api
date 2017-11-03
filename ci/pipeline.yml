@@ -150,7 +150,6 @@ jobs:
   - aggregate:
     - { get: version, passed: [stage], trigger: false }
     - { get: repo, passed: [stage], trigger: false }
-    - { get: staging, passed: [stage], trigger: false }
   - task: create-release-name
     file: repo/ci/tasks/create-release-name.yml
     params:
