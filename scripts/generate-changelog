@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e -u
+
+changelog_file_name="CHANGELOG.md"
+rm "${changelog_file_name}"
+conventional-changelog -p "angular" -i "${changelog_file_name}" -s -r 0
