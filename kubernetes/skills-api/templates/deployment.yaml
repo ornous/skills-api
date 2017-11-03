@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ template "name" . }}
+  name: {{ .Release.Name }}
   labels:
     app: {{ template "name" . }}
     version: {{ .Chart.Version }}

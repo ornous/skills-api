@@ -89,7 +89,7 @@ jobs:
       chart: repo/kubernetes/skills-api-0.14.0.tgz
       release: release-name/release-name
       wait_until_ready: true
-      debug: true # turn on to add --dry-run --debug to helm run
+      debug: false # turn on to add --dry-run --debug to helm run
       replace: false
       override_values:
       - key: replicaCount
@@ -239,7 +239,6 @@ resources:
     repository: senforsce/artillery
     username: {{docker-hub-username}}
     password: {{docker-hub-password}}
-
 - name: cucumber
   type: docker-image
   source:
