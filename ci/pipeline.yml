@@ -83,7 +83,7 @@ jobs:
     file: repo/ci/tasks/create-release-name.yml
     params:
       app: skills-api
-      env: testing
+      env: test
   - put: test-env
     params:
       chart: repo/kubernetes/skills-api-0.14.0.tgz
