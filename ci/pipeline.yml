@@ -58,6 +58,9 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - get: nodejs-image
+      params: { save: false, download: false }
+      trigger: true
     - get: version
       trigger: true
     - get: repo
@@ -70,6 +73,7 @@ jobs:
         tag_as_latest: true
         cache_tag: latest
         cache: true
+        # load_base: nodejs-image
         build_args:
           APP_VERSION: ((version/number))
 - name: deploy
@@ -197,6 +201,11 @@ resources:
     uri: {{gitlab-repo}}
     branch: master
     private_key: {{gitlab-private-key}}
+- name: nodejs-image
+  type: docker-image
+  source:
+    repository: node
+    tag: 8.8.1-alpine
 - name: skills-api-image
   type: docker-image
   source:
