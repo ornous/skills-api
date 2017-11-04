@@ -9,6 +9,9 @@ const {
 
 const db = require('../models').sequelize
 
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
+
 const Person = new GraphQLObjectType({
   name: 'Person',
   decription: 'Represents a person',
@@ -103,8 +106,12 @@ const Mutation = new GraphQLObjectType({
         lastName: { type: new GraphQLNonNull(GraphQLString) },
         email: { type: new GraphQLNonNull(GraphQLString) }
       },
-      resolve: (value, { firstName, lastName, email }) =>
-        db.models.Person.create({ firstName, lastName, email })
+      resolve: (value, { firstName, lastName, email }) => {
+        const user = db.models.Person.create({ firstName, lastName, email })
+        pubsub.publish('userCreated', { userCreated: user })
+
+        return user
+      }
     },
     removeSkillFromUser: {
       type: Skill,
@@ -129,9 +136,21 @@ const Mutation = new GraphQLObjectType({
   })
 })
 
+const Subscription = new GraphQLObjectType({
+  name: 'Skills_Subscriptions',
+  description: 'Sur courtrajmé: Branche toi!',
+  fields: () => ({
+    userCreated: {
+      type: Person,
+      subscribe: () => pubsub.asyncIterator('userCreated')
+    }
+  })
+})
+
 const Schema = new GraphQLSchema({
   query: Query,
-  mutation: Mutation
+  mutation: Mutation,
+  subscription: Subscription
 })
 
 module.exports = Schema

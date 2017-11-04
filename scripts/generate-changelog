@@ -1,7 +1,15 @@
 #!/bin/bash
 
-set -e -u
+set -u -x
 
 changelog_file_name="CHANGELOG.md"
-rm "${changelog_file_name}"
+rm -f "${changelog_file_name}"
 conventional-changelog -p "angular" -i "${changelog_file_name}" -s -r 0
+echo -n "changes: "
+git diff -- CHANGELOG.md | cat
+git status --short | grep -q CHANGELOG.md
+res=$?
+echo ${res}
+git add CHANGELOG.md
+git commit -m "docs: Update README.md"
+git push
