@@ -3,5 +3,5 @@
 set -e -u
 
 pwd
-artillery run -e "${env}" "repo/artillery.yml" -o "report.json"
+../node_modules/.bin/artillery run -e "${env}" "repo/artillery.yml" -o "report.json"
 ls -alh
