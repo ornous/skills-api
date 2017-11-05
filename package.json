@@ -39,13 +39,13 @@
   "scripts": {
     "install": "node init.js",
     "commitmsg": "validate-commit-msg",
-    "precommit": "lint-staged && yarn changelog && git add CHANGELOG.md",
+    "precommit": "lint-staged && yarn changelog",
     "prepush": "yarn test",
     "test": "yarn lint",
     "lint": "prettier-standard --verbose --fix src/**/*.js | snazzy",
     "start": "DEBUG=1 NODE_PATH=./src node src",
     "start:dev": "NODE_PATH=./src nodemon --exec \"yarn lint && node\" src | bunyan",
-    "changelog": "rm CHANGELOG.md && conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
+    "changelog": "./scripts/generate-changelog"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,json,css}": [
