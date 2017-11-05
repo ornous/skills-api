@@ -19,14 +19,15 @@
 ### Features
 
 * **autodeploy:** add release name for helm ([05cf3e0](https://gitlab.com/ornous/skills/api/commit/05cf3e0))
-* **autodeploy:** Add release name generation CI task ([72e6524](https://gitlab.com/ornous/skills/api/commit/72e6524))
 * **autodeploy:** Add release name generation CI task ([dba726b](https://gitlab.com/ornous/skills/api/commit/dba726b))
+* **autodeploy:** Add release name generation CI task ([72e6524](https://gitlab.com/ornous/skills/api/commit/72e6524))
 * **changelog:** Add static changlog ([ca4947e](https://gitlab.com/ornous/skills/api/commit/ca4947e))
 * **changelog:** Update changelog ([31f64f3](https://gitlab.com/ornous/skills/api/commit/31f64f3))
 * **CI:** scripts directory ([070ee90](https://gitlab.com/ornous/skills/api/commit/070ee90))
 * **versioning:** Disable yarn versioning ([d140777](https://gitlab.com/ornous/skills/api/commit/d140777))
 * **versioning:** fix dockerfile and pipeline versions ([cbb2acf](https://gitlab.com/ornous/skills/api/commit/cbb2acf))
 * Add Apollo Engine ([9721237](https://gitlab.com/ornous/skills/api/commit/9721237))
+* Expose user data creation ([1accf0a](https://gitlab.com/ornous/skills/api/commit/1accf0a))
 * Transparently add changelog on commit ([dfbb570](https://gitlab.com/ornous/skills/api/commit/dfbb570))
 * validate and limit commit scopes ([61a0ffc](https://gitlab.com/ornous/skills/api/commit/61a0ffc))
 
