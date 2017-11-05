@@ -1,0 +1,15 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: "andrewgbliss/docker-artillery"}
+
+inputs:
+- name: repo
+
+outputs:
+- name: reports.json
+
+run:
+  path: repo/ci/scripts/run-artillery-tests

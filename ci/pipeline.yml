@@ -114,7 +114,18 @@ jobs:
   serial: true
   plan:
   - aggregate:
+    - { get: repo, passed: [deploy], trigger: false }
     - { get: test-env, passed: [deploy], trigger: true }
+  - task: create-release-name
+    file: repo/ci/tasks/create-release-name.yml
+    params:
+      app: skills-api
+      env: test
+  - task: artillery-tests
+    file: repo/ci/tasks/run-artillery-tests.yml
+    params:
+      env: test
+      target: http://release-name/release-name.skills.ozzy.systems
 - name: security
   public: true
   serial: true
