@@ -45,6 +45,12 @@ const Person = new GraphQLObjectType({
       resolve (person) {
         return person.getSkills()
       }
+    },
+    createdAt: {
+      type: GraphQLString,
+      resolve (person) {
+        return person.createdAt
+      }
     }
   })
 })
