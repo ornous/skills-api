@@ -10,13 +10,21 @@ config:
       Content-Type: 'application/json'
       Accept: 'application/json'
   environments:
-    production:
-      target: "http://skills.ozzy.systems"
+    testing:
       phases:
-        - duration: 120
+        - duration: 30
+          arrivalRate: 1
+          rampTo: 10
+          name: "Warm Up"
+        - duration: 60
           arrivalRate: 10
+          name: "Sustain"
+        - duration: 30
+          arrivalRate: 10
+          rampTo: 1
+          name: "Cool Down"
     staging:
-      target: "http://localhost:3001"
+      target: "https://staging.skills.ozzy.systems"
       phases:
         - duration: 120
           arrivalRate: 10
@@ -25,6 +33,11 @@ config:
         - duration: 600
           arrivalRate: 50
           name: "Sustained max load"
+    production:
+      target: "https://skills.ozzy.systems"
+      phases:
+        - duration: 120
+          arrivalRate: 10
 scenarios:
   - name: "Basic Smoke-Perf-Test"
     flow:

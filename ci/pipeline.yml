@@ -1,18 +1,18 @@
 groups:
 - name: master
   jobs:
-  - minor
-  - major
   - build
   - deploy
-  - security
   - performance
-  - uat
   - stage
-  - promote
+  - ship
 - name: merge-requests
   jobs:
   - test
+- name: versions
+  jobs:
+  - minor
+  - major
 - name: ci-images
   jobs:
   - build-images
@@ -83,14 +83,13 @@ jobs:
   - aggregate:
     - { get: version, passed: [build], trigger: true }
     - { get: repo, passed: [build], trigger: true }
-    - get: release-name
+    - get: release
       params:
-        app: "skills-api"
         env: "test"
   - put: test-env
     params:
       chart: repo/kubernetes/skills-api-0.14.0.tgz
-      release: release-name/release-name
+      release: release/name
       wait_until_ready: true
       debug: true # turn on to add --dry-run --debug to helm run
       replace: false
@@ -101,66 +100,51 @@ jobs:
         path: version/number
       - key: ingress.enabled
         value: false
-  - put: release-name
-- name: uat
-  public: true
-  serial: true
-  plan:
-  - aggregate:
-    - { get: version, passed: [deploy], trigger: true }
-    - { get: test-env, passed: [deploy], trigger: true }
+  - put: release
 - name: performance
   public: true
   serial: true
   plan:
   - aggregate:
     - { get: repo, passed: [deploy], trigger: false }
-    - { get: release-name, passed: [deploy], trigger: true }
+    - { get: version, passed: [deploy], trigger: false }
+    - { get: release, passed: [deploy], trigger: true }
   - task: artillery-tests
     file: repo/ci/tasks/run-artillery-tests.yml
     params:
       env: staging
-      target: http://((release-name/release-name)).skills.ozzy.systems
-- name: security
-  public: true
-  serial: true
-  plan:
-  - aggregate:
-    - { get: test-env, passed: [deploy], trigger: true }
+      # target: http://((release/name)).skills.ozzy.systems
+      target: http://192.168.0.24:3001
 - name: stage
   public: true
   serial: true
   plan:
   - aggregate:
-    - { get: version, passed: [uat], trigger: false }
+    - { get: version, passed: [performance], trigger: false }
     - { get: repo, passed: [performance], trigger: false }
-  - task: create-release-name
-    file: repo/ci/tasks/create-release-name.yml
-    params:
-      app: skills-api
-      env: staging
+    - get: release
+      params:
+        env: "staging"
   - put: staging
     params:
       chart: repo/kubernetes/skills-api-0.14.0.tgz
-      release: release-name/release-name
+      release: release/name
       wait_until_ready: true
       debug: false # turn on to add --dry-run --debug to helm run
       replace: true
       override_values:
       - key: image.tag
         path: version/number
-- name: promote
+- name: ship
   public: true
   serial: true
   plan:
   - aggregate:
     - { get: version, passed: [stage], trigger: false }
     - { get: repo, passed: [stage], trigger: false }
-  - task: create-release-name
-    file: repo/ci/tasks/create-release-name.yml
-    params:
-      app: skills-api
-      env: production
+    - get: release
+      params:
+        env: "production"
   - put: production
     params:
       chart: repo/kubernetes/skills-api-0.14.0.tgz
@@ -259,11 +243,11 @@ resources:
     repository: senforsce/cucumber
     username: {{docker-hub-username}}
     password: {{docker-hub-password}}
-- name: release-name
+- name: release
   type: smuggler
   source:
     smuggler_debug: true
-    target_file: release-name
+    target_file: name
     app_name: skills-api
     commands:
       check: |
