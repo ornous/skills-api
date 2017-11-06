@@ -15,5 +15,4 @@ Final approval triggers a promotion of the release into the production environme
 
 ### Support Channels
 
-- GitLab issues: https://github.com/kubenetes/charts/issues
 - Twitter Ozzy Ndiaye - http://twitter.com/@ornous
