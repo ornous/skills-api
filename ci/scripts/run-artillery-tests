@@ -2,5 +2,18 @@
 
 set -e -u
 
-ls -Alh /usr/src
-/usr/src/node_modules/.bin/artillery run -e "${env}" "repo/artillery.yml" -o "report.json"
+targetFlag=""
+if [ ! -z ${target+x} ]; then
+  targetFlag="-t ${target}"
+fi
+echo "Target flag: ${targetFlag}"
+
+echo /usr/src/node_modules/.bin/artillery run "repo/artillery.yml" \
+  -e "${env}" \
+  -o "report.json" \
+  ${targetFlag}
+
+/usr/src/node_modules/.bin/artillery run "repo/artillery.yml" \
+  -e "${env}" \
+  -o "report.json" \
+  ${targetFlag}

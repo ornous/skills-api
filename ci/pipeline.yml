@@ -83,17 +83,16 @@ jobs:
   - aggregate:
     - { get: version, passed: [build], trigger: true }
     - { get: repo, passed: [build], trigger: true }
-  - task: create-release-name
-    file: repo/ci/tasks/create-release-name.yml
-    params:
-      app: skills-api
-      env: test
+    - get: release-name
+      params:
+        app: "skills-api"
+        env: "test"
   - put: test-env
     params:
       chart: repo/kubernetes/skills-api-0.14.0.tgz
       release: release-name/release-name
       wait_until_ready: true
-      debug: false # turn on to add --dry-run --debug to helm run
+      debug: true # turn on to add --dry-run --debug to helm run
       replace: false
       override_values:
       - key: replicaCount
@@ -102,6 +101,7 @@ jobs:
         path: version/number
       - key: ingress.enabled
         value: false
+  - put: release-name
 - name: uat
   public: true
   serial: true
@@ -115,17 +115,12 @@ jobs:
   plan:
   - aggregate:
     - { get: repo, passed: [deploy], trigger: false }
-    - { get: test-env, passed: [deploy], trigger: true }
-  - task: create-release-name
-    file: repo/ci/tasks/create-release-name.yml
-    params:
-      app: skills-api
-      env: test
+    - { get: release-name, passed: [deploy], trigger: true }
   - task: artillery-tests
     file: repo/ci/tasks/run-artillery-tests.yml
     params:
-      env: test
-      target: http://release-name/release-name.skills.ozzy.systems
+      env: staging
+      target: http://((release-name/release-name)).skills.ozzy.systems
 - name: security
   public: true
   serial: true
@@ -138,7 +133,7 @@ jobs:
   plan:
   - aggregate:
     - { get: version, passed: [uat], trigger: false }
-    - { get: repo, passed: [deploy], trigger: false }
+    - { get: repo, passed: [performance], trigger: false }
   - task: create-release-name
     file: repo/ci/tasks/create-release-name.yml
     params:
@@ -264,13 +259,37 @@ resources:
     repository: senforsce/cucumber
     username: {{docker-hub-username}}
     password: {{docker-hub-password}}
+- name: release-name
+  type: smuggler
+  source:
+    smuggler_debug: true
+    target_file: release-name
+    app_name: skills-api
+    commands:
+      check: |
+        echo "${SMUGGLER_app_name}-$(cat /dev/urandom | tr -dc 'a-z1-9' | fold -w 8 | head -n 1)" > ${SMUGGLER_OUTPUT_DIR}/versions
+      in: |
+        echo "${SMUGGLER_VERSION_ID}" > \
+          ${SMUGGLER_DESTINATION_DIR}/${SMUGGLER_target_file}
+        echo "date=$(date)" > ${SMUGGLER_OUTPUT_DIR}/metadata
+      out: |
+        version=$(cat "${SMUGGLER_SOURCES_DIR}/${SMUGGLER_target_file}/${SMUGGLER_target_file}")
+        echo "${version}" > ${SMUGGLER_OUTPUT_DIR}/versions
+        echo "date=$(date)\nfaked=true" > ${SMUGGLER_OUTPUT_DIR}/metadata
 
 resource_types:
 - name: helm
-  type: docker-image
   source:
     repository: linkyard/concourse-helm-resource
-- name: merge-request
   type: docker-image
+
+- name: merge-request
   source:
     repository: jakedsouza/gitlab-merge-request-resource
+  type: docker-image
+
+- name: smuggler
+  source:
+    repository: redfactorlabs/concourse-smuggler-resource
+    tag: alpine
+  type: docker-image
