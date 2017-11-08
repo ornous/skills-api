@@ -3,13 +3,16 @@ const bunyan = require('bunyan')
 const bodyParser = require('body-parser')
 const compression = require('compression')
 const { Engine } = require('apollo-engine')
-const expressBunyan = require('express-bunyan-logger')
+// const expressBunyan = require('express-bunyan-logger')
 const express = require('express')
 const { createServer } = require('http')
 const { execute, subscribe } = require('graphql')
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
 
 const { SubscriptionServer } = require('subscriptions-transport-ws')
+const { PubSub } = require('graphql-subscriptions')
+
+const pubsub = new PubSub()
 
 const { sequelize } = require('./models')
 const schema = require('./schema')
@@ -55,6 +58,7 @@ app.use(
 )
 
 app.use(function (err, req, res, next) {
+  if (err) console.log('Error :(')
   console.log('Coool')
 })
 
@@ -63,7 +67,7 @@ app.use(
   bodyParser.json(),
   graphqlExpress({
     schema,
-    context: { models: sequelize.models, db: sequelize },
+    context: { ...sequelize.models, pubsub },
     logger: logger,
     tracing: true,
     cacheControl: true
