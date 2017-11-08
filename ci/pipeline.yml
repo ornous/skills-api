@@ -100,6 +100,8 @@ jobs:
         path: version/number
       - key: ingress.enabled
         value: false
+      - key: ingress.hosts
+        value: ["test.skills.35.198.160.30.nip.io"]
   - put: release
 - name: performance
   public: true
@@ -114,7 +116,7 @@ jobs:
     params:
       env: staging
       # target: http://((release/name)).skills.ozzy.systems
-      target: http://192.168.0.24:3001
+      target: test.skills.35.198.160.30.nip.io
 - name: stage
   public: true
   serial: true
