@@ -19,20 +19,22 @@
 ### Features
 
 * **autodeploy:** add release name for helm ([05cf3e0](https://gitlab.com/ornous/skills/api/commit/05cf3e0))
-* **autodeploy:** Add release name generation CI task ([dba726b](https://gitlab.com/ornous/skills/api/commit/dba726b))
 * **autodeploy:** Add release name generation CI task ([72e6524](https://gitlab.com/ornous/skills/api/commit/72e6524))
+* **autodeploy:** Add release name generation CI task ([dba726b](https://gitlab.com/ornous/skills/api/commit/dba726b))
 * **changelog:** Add static changlog ([ca4947e](https://gitlab.com/ornous/skills/api/commit/ca4947e))
 * **changelog:** Update changelog ([31f64f3](https://gitlab.com/ornous/skills/api/commit/31f64f3))
 * **ci:** Add artillery perf tests to the pipeline ([c86b95f](https://gitlab.com/ornous/skills/api/commit/c86b95f))
-* validate and limit commit scopes ([61a0ffc](https://gitlab.com/ornous/skills/api/commit/61a0ffc))
 * **ci:** Propagate release into artillery ([f3d0077](https://gitlab.com/ornous/skills/api/commit/f3d0077))
-* Add Apollo Engine ([9721237](https://gitlab.com/ornous/skills/api/commit/9721237))
-* Expose user data creation ([1accf0a](https://gitlab.com/ornous/skills/api/commit/1accf0a))
-* Transparently add changelog on commit ([dfbb570](https://gitlab.com/ornous/skills/api/commit/dfbb570))
 * **ci:** Use Smuggler to encapsulate release-names as a resource ([e080f8b](https://gitlab.com/ornous/skills/api/commit/e080f8b))
 * **CI:** scripts directory ([070ee90](https://gitlab.com/ornous/skills/api/commit/070ee90))
+* **docs:** Add esdoc ([be1201b](https://gitlab.com/ornous/skills/api/commit/be1201b))
 * **versioning:** Disable yarn versioning ([d140777](https://gitlab.com/ornous/skills/api/commit/d140777))
 * **versioning:** fix dockerfile and pipeline versions ([cbb2acf](https://gitlab.com/ornous/skills/api/commit/cbb2acf))
+* Add Apollo Engine ([9721237](https://gitlab.com/ornous/skills/api/commit/9721237))
+* Expose user data creation ([1accf0a](https://gitlab.com/ornous/skills/api/commit/1accf0a))
+* Restrict resolvers context to models and mq ([36d581d](https://gitlab.com/ornous/skills/api/commit/36d581d))
+* Transparently add changelog on commit ([dfbb570](https://gitlab.com/ornous/skills/api/commit/dfbb570))
+* validate and limit commit scopes ([61a0ffc](https://gitlab.com/ornous/skills/api/commit/61a0ffc))
 
 
 ### Performance Improvements

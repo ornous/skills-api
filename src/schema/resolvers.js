@@ -1,8 +1,23 @@
+const USER_CREATED_TOPIC = 'userCreated'
+const USER_SIGNED_IN_TOPIC = 'userSignedIn'
+const USER_FAILED_SIGN_IN_TOPIC = 'userFailedSignin'
+
 module.exports = {
   Query: {
-    people: async (_, args, { Person }) => Person.findAll({ where: args }),
-
-    skills: async (_, args, { Skill }) => Skill.findAll({ where: args })
+    people: async (_, args, { Person }) => Person.findAll(),
+    user: async (_, { id }, { Person }) => Person.findById(id) || null,
+    currentUser: async (_, args, { user }) => user || null
+  },
+  Subscription: {
+    userCreated: {
+      subscribe: (_, { pubsub }) => pubsub.asyncIterator(USER_CREATED_TOPIC)
+    },
+    userSignedIn: {
+      subscribe: (_, { pubsub }) => pubsub.asyncIterator(USER_SIGNED_IN_TOPIC)
+    },
+    userFailedSignIn: {
+      subscribe: (_, { pubsub }) => pubsub.asyncIterator(USER_SIGNED_IN_TOPIC)
+    }
   },
   Mutation: {
     createUser: async (_, data, { Person, pubsub }) => {
@@ -13,21 +28,26 @@ module.exports = {
         password: data.authProvider.email.password
       }
       const user = await Person.create(payload)
-      pubsub.publish('userCreated', { user })
+      pubsub.publish(USER_CREATED_TOPIC, { user })
 
       return user
     },
 
-    signUserIn: async (root, { email }, { Person, pubsub }) => {
+    signUserIn: async (_, { email }, { Person, pubsub }) => {
       const user = await Person.findOne({
         where: { email: email.email } // Kind of embarrassing <_<
       })
-      pubsub.publish('userSignedIn', { user })
 
-      if (user.validatePassword(user.password)) {
-        return { token: `token-${user.email}`, user }
+      /* @todo What if we cannot find them? :( */
+
+      if (!user.validatePassword(user.password)) {
+        pubsub.publish(USER_FAILED_SIGN_IN_TOPIC, { user, email: email.email })
+        throw new Error("Ha! You don't know your password.")
       }
-      // TODO Otherwise crash and burn <3
+
+      pubsub.publish(USER_SIGNED_IN_TOPIC, { user })
+
+      return { token: `token-${user.email}`, user }
     },
 
     addSkillToUser: async (_, { userId, name }, { Person, pubsub }) => {

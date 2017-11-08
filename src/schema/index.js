@@ -3,8 +3,14 @@ const resolvers = require('./resolvers')
 
 const typeDefs = `
   type Query {
+    # Lists users
     people: [Person!]
-    skills: [Skill!]
+
+    # Get a user
+    user(id: ID!): Person
+
+    # Currently logged in user or null if logged out
+    currentUser: Person
   }
 
   type Mutation {
@@ -12,6 +18,12 @@ const typeDefs = `
     signUserIn(email: AUTH_PROVIDER_EMAIL): SigninPayload!
     removeSkillFromUser(id: ID!, userId: ID!): Int!
     addSkillToUser(userId: ID!, name: String!): Skill!
+  }
+
+  type Subscription {
+    userCreated: Person!
+    userSignedIn: Person!
+    userFailedSignIn: Person!
   }
 
   type Person {

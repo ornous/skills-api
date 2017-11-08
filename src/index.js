@@ -62,12 +62,21 @@ app.use(function (err, req, res, next) {
   console.log('Coool')
 })
 
+// Placeholder for logged in user
+const user = {
+  id: 1,
+  firstName: 'Ozzy',
+  lastName: 'Ndiaye',
+  email: 'snekshaark@gmail.com',
+  createdAt: 'now-ish'
+}
+
 app.use(
   '/graphql',
   bodyParser.json(),
   graphqlExpress({
     schema,
-    context: { ...sequelize.models, pubsub },
+    context: { ...sequelize.models, pubsub, user },
     logger: logger,
     tracing: true,
     cacheControl: true
