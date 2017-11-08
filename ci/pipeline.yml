@@ -100,8 +100,8 @@ jobs:
         path: version/number
       - key: ingress.enabled
         value: false
-      - key: ingress.hosts
-        value: ["test.skills.35.198.160.30.nip.io"]
+      - key: ingress.host
+        value: "test.skills.35.198.160.30.nip.io"
   - put: release
 - name: performance
   public: true
