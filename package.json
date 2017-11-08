@@ -12,6 +12,8 @@
     "compression": "^1.7.1",
     "cors": "^2.8.4",
     "dotenv": "^4.0.0",
+    "esdoc": "^1.0.3",
+    "esdoc-standard-plugin": "^1.0.0",
     "express": "^4.15.4",
     "express-bunyan-logger": "^1.3.2",
     "graphql": "^0.11.7",
@@ -37,15 +39,16 @@
     "standard": "^10.0.3"
   },
   "scripts": {
-    "install": "node init.js",
+    "changelog": "./scripts/generate-changelog",
     "commitmsg": "validate-commit-msg",
+    "esdoc": "esdoc",
+    "install": "node init.js",
+    "lint": "prettier-standard --verbose --fix src/**/*.js | snazzy",
     "precommit": "lint-staged && yarn changelog",
     "prepush": "yarn test",
-    "test": "yarn lint",
-    "lint": "prettier-standard --verbose --fix src/**/*.js | snazzy",
     "start": "DEBUG=1 NODE_PATH=./src node src",
     "start:dev": "NODE_PATH=./src nodemon --exec \"yarn lint && node\" src | bunyan",
-    "changelog": "./scripts/generate-changelog"
+    "test": "yarn lint"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,json,css}": [
