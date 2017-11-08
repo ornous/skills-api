@@ -12,7 +12,7 @@ const { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
 const { SubscriptionServer } = require('subscriptions-transport-ws')
 
 const { sequelize } = require('./models')
-const schema = require('./data/schema')
+const schema = require('./schema')
 
 const logger = bunyan.createLogger({
   name: 'Server',
@@ -39,12 +39,12 @@ if (process.env.APP_ENV === 'production') {
       }
     },
     graphqlPort: APP_PORT || 3000, // GraphQL port
-    dumpTraffic: true // Debug configuration that logs traffic between Proxy and GraphQL server
+    dumpTraffic: false // Debug configuration that logs traffic between Proxy and GraphQL server
   })
 
   app.use(engine.expressMiddleware())
 }
-app.use(expressBunyan())
+// app.use(expressBunyan())
 app.use(compression())
 app.use(
   '/graphql',
@@ -54,12 +54,17 @@ app.use(
   })
 )
 
+app.use(function (err, req, res, next) {
+  console.log('Coool')
+})
+
 app.use(
   '/graphql',
   bodyParser.json(),
   graphqlExpress({
     schema,
-    context: {},
+    context: { models: sequelize.models, db: sequelize },
+    logger: logger,
     tracing: true,
     cacheControl: true
   })

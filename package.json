@@ -7,6 +7,7 @@
     "apollo-engine": "^0.5.2",
     "apollo-server-express": "^1.2.0",
     "apollo-tracing": "^0.0.9",
+    "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.18.1",
     "bunyan": "^1.8.12",
     "compression": "^1.7.1",
