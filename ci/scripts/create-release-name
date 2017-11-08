@@ -9,4 +9,4 @@ if [ "${env}" = "test" ]; then
   release_name="${release_name}-${hash}"
 fi
 echo "Picked ${release_name}"
-echo "${release_name}" > release-name/release-name
+echo "${release_name}" > release/name

@@ -91,16 +91,16 @@ jobs:
       chart: repo/kubernetes/skills-api-0.14.0.tgz
       release: release/name
       wait_until_ready: true
-      debug: true # turn on to add --dry-run --debug to helm run
+      debug: false # turn on to add --dry-run --debug to helm run
       replace: false
       override_values:
       - key: replicaCount
         value: "1"
       - key: image.tag
         path: version/number
-      - key: ingress.enabled
-        value: false
-      - key: ingress.host
+      - key: IngressEnabled
+        value: true
+      - key: IngressHost
         value: "test.skills.35.198.160.30.nip.io"
   - put: release
 - name: performance
@@ -150,7 +150,7 @@ jobs:
   - put: production
     params:
       chart: repo/kubernetes/skills-api-0.14.0.tgz
-      release: release-name/release-name
+      release: release/name
       wait_until_ready: true
       debug: false # turn on to add --dry-run --debug to helm run
       replace: true
@@ -259,7 +259,7 @@ resources:
           ${SMUGGLER_DESTINATION_DIR}/${SMUGGLER_target_file}
         echo "date=$(date)" > ${SMUGGLER_OUTPUT_DIR}/metadata
       out: |
-        version=$(cat "${SMUGGLER_SOURCES_DIR}/${SMUGGLER_target_file}/${SMUGGLER_target_file}")
+        version=$(cat "${SMUGGLER_SOURCES_DIR}/release/${SMUGGLER_target_file}")
         echo "${version}" > ${SMUGGLER_OUTPUT_DIR}/versions
         echo "date=$(date)\nfaked=true" > ${SMUGGLER_OUTPUT_DIR}/metadata
 

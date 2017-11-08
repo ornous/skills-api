@@ -1,4 +1,4 @@
-{{- if .Values.ingress.enabled -}}
+{{- if .Values.IngressEnabled -}}
 {{- $serviceName := include "fullname" . -}}
 {{- $servicePort := .Values.service.externalPort -}}
 apiVersion: extensions/v1beta1
@@ -18,7 +18,7 @@ metadata:
 spec:
   rules:
     {{ .Values.ingress.host }}
-    - host: {{ .Values.ingress.host }}
+    - host: {{ .Values.IngressHost }}
       http:
         paths:
           - path: /
