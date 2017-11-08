@@ -34,6 +34,7 @@
 * Expose user data creation ([1accf0a](https://gitlab.com/ornous/skills/api/commit/1accf0a))
 * Restrict resolvers context to models and mq ([36d581d](https://gitlab.com/ornous/skills/api/commit/36d581d))
 * Transparently add changelog on commit ([dfbb570](https://gitlab.com/ornous/skills/api/commit/dfbb570))
+* Use nip.io as wildcard DNS for istio ingress ([9fb1727](https://gitlab.com/ornous/skills/api/commit/9fb1727))
 * validate and limit commit scopes ([61a0ffc](https://gitlab.com/ornous/skills/api/commit/61a0ffc))
 
 
