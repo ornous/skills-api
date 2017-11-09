@@ -10,9 +10,6 @@ const { execute, subscribe } = require('graphql')
 const { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
 
 const { SubscriptionServer } = require('subscriptions-transport-ws')
-const { PubSub } = require('graphql-subscriptions')
-
-const pubsub = new PubSub()
 
 const { sequelize } = require('./models')
 const schema = require('./schema')
@@ -76,7 +73,7 @@ app.use(
   bodyParser.json(),
   graphqlExpress({
     schema,
-    context: { ...sequelize.models, pubsub, user },
+    context: { ...sequelize.models, user },
     logger: logger,
     tracing: true,
     cacheControl: true
@@ -135,7 +132,7 @@ sequelize
     server.listen(APP_PORT, APP_HOST, () => {
       app.emit('listening')
       const srv = new SubscriptionServer(
-        { execute, subscribe, schema },
+        { execute, schema, subscribe },
         { server: server, path: '/subscriptions' }
       )
       return srv

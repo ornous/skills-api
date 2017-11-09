@@ -1,26 +1,29 @@
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
+
 const USER_CREATED_TOPIC = 'userCreated'
 const USER_SIGNED_IN_TOPIC = 'userSignedIn'
 const USER_FAILED_SIGN_IN_TOPIC = 'userFailedSignin'
 
 module.exports = {
   Query: {
-    people: async (_, args, { Person }) => Person.findAll(),
+    people: async (_, {}, { Person }) => Person.findAll(),
     user: async (_, { id }, { Person }) => Person.findById(id) || null,
-    currentUser: async (_, args, { user }) => user || null
+    currentUser: async (_, {}, { user }) => user || null
   },
   Subscription: {
     userCreated: {
-      subscribe: (_, { pubsub }) => pubsub.asyncIterator(USER_CREATED_TOPIC)
+      subscribe: () => pubsub.asyncIterator(USER_CREATED_TOPIC)
     },
     userSignedIn: {
-      subscribe: (_, { pubsub }) => pubsub.asyncIterator(USER_SIGNED_IN_TOPIC)
+      subscribe: () => pubsub.asyncIterator(USER_SIGNED_IN_TOPIC)
     },
     userFailedSignIn: {
-      subscribe: (_, { pubsub }) => pubsub.asyncIterator(USER_SIGNED_IN_TOPIC)
+      subscribe: () => pubsub.asyncIterator(USER_SIGNED_IN_TOPIC)
     }
   },
   Mutation: {
-    createUser: async (_, data, { Person, pubsub }) => {
+    createUser: async (_, data, { Person }) => {
       const payload = {
         firstName: data.firstName,
         lastName: data.lastName,
@@ -33,7 +36,7 @@ module.exports = {
       return user
     },
 
-    signUserIn: async (_, { email }, { Person, pubsub }) => {
+    signUserIn: async (_, { email }, { Person }) => {
       const user = await Person.findOne({
         where: { email: email.email } // Kind of embarrassing <_<
       })
@@ -50,7 +53,7 @@ module.exports = {
       return { token: `token-${user.email}`, user }
     },
 
-    addSkillToUser: async (_, { userId, name }, { Person, pubsub }) => {
+    addSkillToUser: async (_, { userId, name }, { Person }) => {
       const user = await Person.findById(userId)
       const skill = await user.createSkill({ name })
 
