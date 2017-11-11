@@ -1,0 +1,12 @@
+version: '3.2'
+
+services:
+  db:
+    image: postgres
+    environment:
+      - DEBUG=true
+      - POSTGRES_USER=definitelynotroot
+      - POSTGRES_DB=skills
+      - POSTGRES_PASS=Sm@11ButMyTea
+  web:
+    build: ../api

@@ -1,5 +1,5 @@
 <a name="0.15.0"></a>
-# 0.15.0 (2017-11-08)
+# 0.15.0 (2017-11-11)
 
 
 ### Bug Fixes
@@ -22,9 +22,9 @@
 * **autodeploy:** Add release name generation CI task ([72e6524](https://gitlab.com/ornous/skills/api/commit/72e6524))
 * **autodeploy:** Add release name generation CI task ([dba726b](https://gitlab.com/ornous/skills/api/commit/dba726b))
 * **changelog:** Add static changlog ([ca4947e](https://gitlab.com/ornous/skills/api/commit/ca4947e))
-* Add Apollo Engine ([9721237](https://gitlab.com/ornous/skills/api/commit/9721237))
 * **changelog:** Update changelog ([31f64f3](https://gitlab.com/ornous/skills/api/commit/31f64f3))
 * **ci:** Add artillery perf tests to the pipeline ([c86b95f](https://gitlab.com/ornous/skills/api/commit/c86b95f))
+* Add Apollo Engine ([9721237](https://gitlab.com/ornous/skills/api/commit/9721237))
 * **ci:** Propagate release into artillery ([f3d0077](https://gitlab.com/ornous/skills/api/commit/f3d0077))
 * **ci:** Use Smuggler to encapsulate release-names as a resource ([e080f8b](https://gitlab.com/ornous/skills/api/commit/e080f8b))
 * **CI:** scripts directory ([070ee90](https://gitlab.com/ornous/skills/api/commit/070ee90))
@@ -36,6 +36,7 @@
 * Schema refactored ([6b784b1](https://gitlab.com/ornous/skills/api/commit/6b784b1))
 * Transparently add changelog on commit ([dfbb570](https://gitlab.com/ornous/skills/api/commit/dfbb570))
 * Use nip.io as wildcard DNS for istio ingress ([9fb1727](https://gitlab.com/ornous/skills/api/commit/9fb1727))
+* Use nip.io as wildcard DNS for istio ingress ([7ef6de1](https://gitlab.com/ornous/skills/api/commit/7ef6de1))
 * validate and limit commit scopes ([61a0ffc](https://gitlab.com/ornous/skills/api/commit/61a0ffc))
 
 
