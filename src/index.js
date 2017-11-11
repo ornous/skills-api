@@ -89,7 +89,7 @@ app.use(
 
 // Graceful startup/shutdown
 app.get('/healthz', (req, res) => {
-  let appStatus = { api: 'ok', db: 'unkown' }
+  let appStatus = { api: 'ok', db: 'unknown' }
   let appStatusCode = 200
 
   sequelize

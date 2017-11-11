@@ -21,9 +21,9 @@ const typeDefs = `
   }
 
   type Subscription {
-    userCreated: Person!
-    userSignedIn: Person!
-    userFailedSignIn: Person!
+    userCreated: Person
+    userSignedIn: Person
+    userFailedSignIn: Person
   }
 
   type Person {
